@@ -47,7 +47,7 @@
       <b class="warning-info">*Поле обязательное для заполнения</b>
 
       <div class="clear"></div>
-      <p class="error-info" :class="this.isErrorLogged ? 'error-info' : 'success-info'">
+      <p :class="'warning-info ' + statusInfo">
         {{this.textLogged}}</p>
 
       <div class="clear"></div>
@@ -107,6 +107,12 @@ export default {
     }
   },
 
+  computed:{
+    statusInfo: function (){
+      return this.isErrorLogged ? 'error-info' : 'success-info'
+    }
+  },
+
   methods:{
 
     isInvalid: function (component) {
@@ -147,7 +153,7 @@ export default {
       const phone = "контактный телефон: " + this.$refs.phone.text.substr(0, 17)
 
       const groupClients = this.getMultiSelectData(this.$refs["group-clients"], "группа клиентов:")
-      const doctor = this.getNotRequiredData(this.$refs.doctor.selected)
+      const doctor = "лечащий врач: " + this.getNotRequiredData(this.$refs.doctor.selected)
 
       const infoSMS = this.isNoSendSMS ? "Не отправлять SMS" : "Отправлять SMS"
 
@@ -213,127 +219,118 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
+$colorError: red
+$colorSuccess: green
+$colorBody: #ddf3d5
 
-input[type="text"]{
-  text-transform: capitalize;
-}
+$borderSuccess: 2px solid $colorSuccess
+$borderError: 2px solid $colorError
 
-body{
-  margin: 0;
-  padding: 0;
-  background-color: #ddf3d5;
-}
+input[type="text"]
+  text-transform: capitalize
 
-.clear{
-  clear: both;
-}
+body
+  margin: 0
+  padding: 0
+  background-color: $colorBody
 
-form{
-  padding: 10px;
-  display: grid;
-  grid-gap: 1rem;
-  margin: 1rem 0;
-  /*grid-template-columns: repeat(4, 1fr);*/
-  grid-template-columns: minmax(10px, 1fr) minmax(230px, 320px) minmax(70px, 320px) minmax(10px, 1fr);
-  border-radius: 10px;
-}
-b.warning-info{
-  text-align: center;
-}
-button, .warning-info, .error-info{
-  grid-column: 2/4;
-}
-.error-info{
-  text-align: center;
-  color: red;
-}
-.success-info{
-  text-align: center;
-  color: green;
-}
-input, select{
-  outline: none;
-}
+form
+  padding: 10px
+  display: grid
+  grid-gap: 1rem
+  margin: 1rem 0
+  grid-template-columns: minmax(10px, 1fr) minmax(230px, 320px) minmax(70px, 320px) minmax(10px, 1fr)
+  border-radius: 10px
 
-.checkbox_no_sms span{
-  grid-column: 2;
-}
-.checkbox_no_sms, .address{
-  display: grid;
-  grid-template-columns: 1fr 10fr;
-  grid-column: 2;
-}
+button, .warning-info
+  grid-column: 2/4
+  text-align: center
 
-/*======================================================================*/
-.my-component{
-  display: grid;
-  grid-template-columns: repeat(7, 2fr);
-  grid-column: 2/4;
-}
+.error-info
+  color: $colorError
 
-.my-component label{
-  grid-column: 1/3;
-}
+.success-info
+  color: $colorSuccess
 
-button, label, input, option, select, div.success, div.error{
-  padding: 10px;
-}
+input, select
+  outline: none
 
-select, option{
-  background-color: white;
-}
+.checkbox_no_sms, .address
+  display: grid
+  grid-template-columns: 1fr 10fr
+  grid-column: 2
 
-.my-component input, .my-component select{
-  grid-column: 3/6;
-}
-div.success, div.error{
-  grid-column: 6/8;
-  text-align: end;
-}
-input, select, button{
-  border: 2px solid #cdccea;
-  border-radius: 2px;
-}
-button.success, select.success, input.success{
-  border: 2px solid green;
-}
-button.error, select.error, input.error{
-  border: 2px solid red;
-}
-div.success{
-  color: green;
-}
-div.error{
-  color: red;
-}
-.bold{
-  font-weight: bold;
-}
+/*======================================================================
 
-@media screen and (min-width: 1908px){
-}
-@media screen and (min-width: 1500px){
-}
-@media screen and (max-width: 1366px){
-}
-@media screen and (max-width: 1200px){
-}
-@media screen and (max-width: 992px) {
-}
-@media screen and (max-width: 768px){
-  .my-component input, .my-component select {
-    grid-column: 3/8;
-  }
-  div.error, div.success{
-    display: none;
-  }
-}
-@media screen and (max-width: 576px){
-}
-@media screen and (max-width: 500px){
-}
-@media screen and (max-width: 320px){
-}
+.my-component
+  display: grid
+  grid-template-columns: repeat(7, 2fr)
+  grid-column: 2/4
+
+  label
+    grid-column: 1/3
+
+div.success, div.error, button, label, input, option, select
+  padding: 10px
+
+select, option
+  background-color: white
+
+.my-component
+  input, select
+    grid-column: 3/6
+
+div
+  &.success, &.error
+    grid-column: 6/8
+    text-align: end
+
+input, select, button
+  border: 2px solid #cdccea
+  border-radius: 2px
+
+  &.success
+    border: $borderSuccess
+
+select.success, input.success
+  border: $borderSuccess
+
+button.error, select.error, input.error
+  border: $borderError
+
+div
+  &.success
+    color: $colorSuccess
+
+  &.error
+    color: $colorError
+
+.bold
+  font-weight: bold
+
+.clear
+  clear: both
+
+/*
+ * @media screen and (min-width: 1908px)
+ * @media screen and (min-width: 1500px)
+ * @media screen and (max-width: 1366px)
+ * @media screen and (max-width: 1200px)
+ * @media screen and (max-width: 992px)
+
+@media screen and (max-width: 768px)
+  .my-component
+    input, select
+      grid-column: 3/8
+
+  div
+    &.error, &.success
+      display: none
+/*
+ * @media screen and (max-width: 576px)
+ * @media screen and (max-width: 500px)
+ * @media screen and (max-width: 320px)
+
 
 </style>

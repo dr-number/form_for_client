@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Vuelidate from "vuelidate/src";
+import './assets/styles.css'
 
 Vue.use(Vuelidate)
 
